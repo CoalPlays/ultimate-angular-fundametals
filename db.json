@@ -1,1 +1,39 @@
-{}
+{
+  "passengers": [
+    {
+      "fullname": "Elias",
+      "id": 1,
+      "checkedIn": true,
+      "baggage": "hold-only",
+      "checkInDate": 1631522818
+    },
+    {
+      "id": 2,
+      "fullname": "raquel",
+      "checkedIn": true,
+      "checkInDate": 1631522818,
+      "baggage": ""
+    },
+    {
+      "id": 3,
+      "fullname": "gabriel",
+      "checkedIn": false,
+      "checkInDate": null,
+      "baggage": ""
+    },
+    {
+      "id": 4,
+      "fullname": "elias",
+      "checkedIn": false,
+      "checkInDate": null,
+      "baggage": ""
+    },
+    {
+      "id": 5,
+      "fullname": "max",
+      "checkedIn": true,
+      "checkInDate": 1631522818,
+      "baggage": ""
+    }
+  ]
+}

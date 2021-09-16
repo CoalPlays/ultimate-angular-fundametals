@@ -1,74 +1,54 @@
 import { Component, OnInit } from "@angular/core";
 
 import { Passenger } from "../../models/passenger.interface";
+import { PassengerDashboardService } from "../../passenger-dashboard.service";
 
 @Component({
   selector: "passenger-dashboard",
   styleUrls: ["passenger-dashboard.component.scss"],
   template: `
     <div>
-      <passenger-count></passenger-count>
-      <passenger-detail></passenger-detail>
-      <h3>Airline Passangers</h3>
-      <ul>
-        <li *ngFor="let passenger of passengers; let i = index">
-          <span class="status" [class.checked-in]="passenger.checkedIn"></span>
-          {{ i }}: {{ passenger.fullname }}
-          <div class="date">
-            Check in date:
-            {{
-              passenger.checkInDate
-                ? (passenger.checkInDate | date: "yMMMMd" | uppercase)
-                : "Not checked in"
-            }}
-          </div>
-          <div>Children: {{ passenger.children?.length || 0 }}</div>
-        </li>
-      </ul>
+      <passenger-count [items]="passengers"> </passenger-count>
+      <div *ngFor="let passenger of passengers">
+        {{ passenger.fullname }}
+      </div>
+      <passenger-detail
+        *ngFor="let passenger of passengers"
+        [detail]="passenger"
+        (remove)="handleRemove($event)"
+        (edit)="handleEdit($event)"
+      >
+      </passenger-detail>
     </div>
   `,
 })
 export class PassengerDashboardComponent implements OnInit {
   passengers: Passenger[];
-  constructor() {}
+  constructor(private passengerService: PassengerDashboardService) {}
   ngOnInit() {
-    this.passengers = [
-      {
-        id: 1,
-        fullname: "stephen",
-        checkedIn: true,
-        checkInDate: 1631522818,
-        children: null,
-      },
-      {
-        id: 2,
-        fullname: "raquel",
-        checkedIn: true,
-        checkInDate: 1631522818,
-        children: [{ name: "Paul", age: 17 }],
-      },
-      {
-        id: 3,
-        fullname: "gabriel",
-        checkedIn: false,
-        children: null,
-      },
-      {
-        id: 4,
-        fullname: "elias",
-        checkedIn: false,
-        children: null,
-      },
-      {
-        id: 5,
-        fullname: "max",
-        checkedIn: true,
-        checkInDate: 1631522818,
-        children: [
-          { name: "Blue", age: 2 },
-          { name: "Alexander von Grossmund", age: 4 },
-        ],
-      },
-    ];
+    this.passengerService
+      .getPassengers()
+      .subscribe((data: Passenger[]) => (this.passengers = data));
+  }
+  handleRemove(event: Passenger) {
+    this.passengerService
+      .removePassengers(event)
+      .subscribe((data: Passenger) => {
+        this.passengers = this.passengers.filter((passenger: Passenger) => {
+          return passenger.id !== event.id;
+        });
+      });
+  }
+  handleEdit(event: Passenger) {
+    this.passengerService
+      .updatePassengers(event)
+      .subscribe((data: Passenger) => {
+        this.passengers = this.passengers.map((passenger: Passenger) => {
+          if (passenger.id === event.id) {
+            passenger = Object.assign({}, passenger, event);
+          }
+          return passenger;
+        });
+      });
   }
 }
