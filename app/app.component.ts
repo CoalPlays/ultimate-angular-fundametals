@@ -19,7 +19,6 @@ interface Nav {
         [routerLinkActiveOptions]="{ exact: item.exact }"
         >{{ item.name }}</a
       >
-      <a routerLink="/oops" routerLinkActive="active">404</a>
     </nav>
     <router-outlet></router-outlet>
   </div>`,
@@ -32,8 +31,13 @@ export class AppComponent {
       exact: true,
     },
     {
+      link: "/passengers",
+      name: "Passengers",
+      exact: true,
+    },
+    {
       link: "/oops",
-      name: "oops",
+      name: "404",
       exact: false,
     },
   ];
